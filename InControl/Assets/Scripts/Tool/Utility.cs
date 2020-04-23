@@ -25,7 +25,7 @@ public static class Utility {
         return (delta >= -Mathf.Epsilon) && (delta <= Mathf.Epsilon);
     }
 
-    public static float SymbolAbs(float value)
+    public static float Abs(float value)
     {
         return value < 0.0f ? -value : value;
     }

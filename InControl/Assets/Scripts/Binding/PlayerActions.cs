@@ -28,6 +28,7 @@ public class PlayerActions : PlayerActionSet {
         var playerActions = new PlayerActions();
 
         playerActions.Fire.AddDefaultBinding(Key.Space);
+        playerActions.Fire.AddDefaultBinding(Mouse.LeftButton);
 
         return playerActions;
     }

@@ -31,6 +31,15 @@ public class PlayerAction : OneAxisInputControl {
         AddDefaultBinding(new KeyBindingSource(keys));
     }
 
+    /// <summary>
+    /// 添加鼠标绑定
+    /// </summary>
+    /// <param name="control"></param>
+    public void AddDefaultBinding(Mouse control)
+    {
+        AddDefaultBinding(new MouseBindingSource(control));
+    }
+
     public void AddDefaultBinding(BindingSource binding)
     {
         if (binding == null)
@@ -99,6 +108,18 @@ public class PlayerAction : OneAxisInputControl {
         }
 
         Commit();
+
+        if (lastInputTypeChangedTick > LastInputTypeChangedTick)
+        {
+            if (lastInputType != BindingSourceType.MouseBindingSource ||
+                Utility.Abs(LastValue - Value) >= MouseBindingSource.JitterThreshold)
+            {
+                var triggerEvent = lastInputType != LastInputType;
+
+                LastInputType = lastInputType;
+                LastInputTypeChangedTick = lastInputTypeChangedTick;
+            }
+        }
     }
 
     void DetectBindings()

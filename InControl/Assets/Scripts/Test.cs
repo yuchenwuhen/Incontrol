@@ -13,9 +13,14 @@ public class Test : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (m_playerActions.Fire.WasReleased)
+		if (m_playerActions.Fire.WasPressed)
         {
             Debug.Log("开火");
         }
 	}
+
+    private void OnGUI()
+    {
+        GUI.Label(new Rect(10, 10, 300, 30), "last Input Type : " + m_playerActions.LastInputType);
+    }
 }

@@ -23,6 +23,22 @@ public class OneAxisInputControl : IInputControl
 
     bool clearInputState;
 
+    public float LastValue
+    {
+        get
+        {
+            return lastState.Value;
+        }
+    }
+
+    public float Value
+    {
+        get
+        {
+            return thisState.Value;
+        }
+    }
+
     void PrepareForUpdate(ulong updateTick)
     {
         if (updateTick < pendingTick)
@@ -48,7 +64,7 @@ public class OneAxisInputControl : IInputControl
     {
         PrepareForUpdate(updateTick);
 
-        if (Utility.SymbolAbs(value) > Utility.SymbolAbs(nextState.RawValue))
+        if (Utility.Abs(value) > Utility.Abs(nextState.RawValue))
         {
             nextState.RawValue = value;
 
