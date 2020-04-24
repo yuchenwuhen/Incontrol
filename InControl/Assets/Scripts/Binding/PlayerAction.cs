@@ -22,6 +22,31 @@ public class PlayerAction : OneAxisInputControl {
         owner.AddPlayerAction(this);
     }
 
+
+    InputDevice device;
+    internal InputDevice Device
+    {
+        get
+        {
+            if (device == null)
+            {
+                device = Owner.Device;
+                //UpdateVisibleBindings();
+            }
+
+            return device;
+        }
+
+        set
+        {
+            if (device != value)
+            {
+                device = value;
+                //UpdateVisibleBindings();
+            }
+        }
+    }
+
     /// <summary>
     /// 添加按钮绑定
     /// </summary>
@@ -29,6 +54,11 @@ public class PlayerAction : OneAxisInputControl {
     public void AddDefaultBinding(params Key[] keys)
     {
         AddDefaultBinding(new KeyBindingSource(keys));
+    }
+
+    public void AddDefaultBinding(InputControlType control)
+    {
+        AddDefaultBinding(new DeviceBindingSource(control));
     }
 
     /// <summary>
@@ -93,7 +123,7 @@ public class PlayerAction : OneAxisInputControl {
             }
             else
             {
-                var value = binding.GetValue();
+                var value = binding.GetValue(Device);
                 if (UpdateWithValue(value, updateTick, deltaTime))
                 {
                     lastInputType = binding.BindingSourceType;

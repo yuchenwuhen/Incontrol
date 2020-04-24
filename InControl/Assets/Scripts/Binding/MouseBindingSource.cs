@@ -103,15 +103,15 @@ public class MouseBindingSource : BindingSource
     }
 
 
-    public override float GetValue()
+    public override float GetValue(InputDevice inputDevice)
     {
         return GetValue(Control);
     }
 
 
-    public override bool GetState()
+    public override bool GetState(InputDevice inputDevice)
     {
-        return Utility.IsNotZero(GetValue());
+        return Utility.IsNotZero(GetValue(inputDevice));
     }
 
 

@@ -13,6 +13,8 @@ public class InputManager {
     static float lastUpdateTime;
     static ulong currentTick;
 
+    public static bool InvertYAxis { get; set; }
+
     static List<PlayerActionSet> playerActionSets = new List<PlayerActionSet>();
 
     internal static bool SetupInternal()

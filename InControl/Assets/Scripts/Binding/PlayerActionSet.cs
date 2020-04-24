@@ -339,6 +339,9 @@ public abstract class PlayerActionSet {
 
     public ReadOnlyCollection<PlayerAction> Actions { get; private set; }
 
+    //List<PlayerOneAxisAction> oneAxisActions = new List<PlayerOneAxisAction>();
+    List<PlayerTwoAxisAction> twoAxisActions = new List<PlayerTwoAxisAction>();
+
     public ulong UpdateTick { get; protected set; }
 
     public BindingSourceType LastInputType = BindingSourceType.None;
@@ -346,6 +349,8 @@ public abstract class PlayerActionSet {
     public ulong LastInputTypeChangedTick;
 
     List<PlayerAction> actions = new List<PlayerAction>();
+
+    public InputDevice Device { get; set; }
 
     protected PlayerActionSet()
     {
@@ -361,6 +366,13 @@ public abstract class PlayerActionSet {
     protected PlayerAction CreatePlayerAction(string name)
     {
         return new PlayerAction(name, this);
+    }
+
+    protected PlayerTwoAxisAction CreateTwoAxisPlayerAction(PlayerAction negativeXAction, PlayerAction positiveXAction, PlayerAction negativeYAction, PlayerAction positiveYAction)
+    {
+        var action = new PlayerTwoAxisAction(negativeXAction, positiveXAction, negativeYAction, positiveYAction);
+        twoAxisActions.Add(action);
+        return action;
     }
 
     internal void Update(ulong updateTick, float deltaTime)
@@ -386,6 +398,12 @@ public abstract class PlayerActionSet {
                 lastInputType = action.LastInputType;
                 lastInputTypeChangedTick = action.LastInputTypeChangedTick;
             }
+        }
+
+        var twoAxisActionsCount = twoAxisActions.Count;
+        for (var i = 0; i < twoAxisActionsCount; i++)
+        {
+            twoAxisActions[i].Update(updateTick, deltaTime);
         }
 
         if (lastInputTypeChangedTick > LastInputTypeChangedTick)

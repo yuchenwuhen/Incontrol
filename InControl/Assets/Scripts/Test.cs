@@ -17,7 +17,14 @@ public class Test : MonoBehaviour {
         {
             Debug.Log("开火");
         }
-	}
+
+        if (m_playerActions.Move.X != 0)
+        {
+            Debug.Log("rotate");
+        }
+        transform.Translate(Vector3.right  * Time.deltaTime * m_playerActions.Move.X, Space.World);
+        transform.Translate(Vector3.up  * Time.deltaTime * m_playerActions.Move.Y, Space.World);
+    }
 
     private void OnGUI()
     {

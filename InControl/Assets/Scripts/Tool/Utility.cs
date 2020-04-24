@@ -29,4 +29,41 @@ public static class Utility {
     {
         return value < 0.0f ? -value : value;
     }
+
+    internal static float ValueFromSides(float negativeSide, float positiveSide)
+    {
+        var nsv = Utility.Abs(negativeSide);
+        var psv = Utility.Abs(positiveSide);
+
+        if (Utility.Approximately(nsv, psv))
+        {
+            return 0.0f;
+        }
+
+        return nsv > psv ? -nsv : psv;
+    }
+
+    internal static float ValueFromSides(float negativeSide, float positiveSide, bool invertSides)
+    {
+        if (invertSides)
+        {
+            return ValueFromSides(positiveSide, negativeSide);
+        }
+        else
+        {
+            return ValueFromSides(negativeSide, positiveSide);
+        }
+    }
+
+    internal static bool TargetIsButton(InputControlType target)
+    {
+        return (target >= InputControlType.Action1 && target <= InputControlType.Action12) ||
+               (target >= InputControlType.Button0 && target <= InputControlType.Button19);
+    }
+
+    internal static bool TargetIsStandard(InputControlType target)
+    {
+        return (target >= InputControlType.LeftStickUp && target <= InputControlType.Action12) ||
+               (target >= InputControlType.Command && target <= InputControlType.DPadY);
+    }
 }

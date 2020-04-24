@@ -6,9 +6,9 @@ public abstract class BindingSource {
 
     public abstract BindingSourceType BindingSourceType { get; }
 
-    public abstract float GetValue();
+    public abstract float GetValue(InputDevice inputDevice);
 
-    public abstract bool GetState();
+    public abstract bool GetState(InputDevice inputDevice);
 
     public abstract bool Equals(BindingSource other);
 

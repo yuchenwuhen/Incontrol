@@ -23,6 +23,14 @@ public class OneAxisInputControl : IInputControl
 
     bool clearInputState;
 
+    internal float NextRawValue
+    {
+        get
+        {
+            return nextState.RawValue;
+        }
+    }
+
     public float LastValue
     {
         get
@@ -37,6 +45,35 @@ public class OneAxisInputControl : IInputControl
         {
             return thisState.Value;
         }
+    }
+
+    public bool State
+    {
+        get
+        {
+            return thisState.State;
+        }
+    }
+
+    internal void SetValue(float value, ulong updateTick)
+    {
+
+        if (updateTick > pendingTick)
+        {
+            lastState = thisState;
+            nextState.Reset();
+            pendingTick = updateTick;
+            pendingCommit = true;
+        }
+
+        nextState.RawValue = value;
+        nextState.Set(value, stateThreshold);
+    }
+
+    public void CommitWithState(bool state, ulong updateTick, float deltaTime)
+    {
+        UpdateWithState(state, updateTick, deltaTime);
+        Commit();
     }
 
     void PrepareForUpdate(ulong updateTick)
@@ -60,6 +97,12 @@ public class OneAxisInputControl : IInputControl
         }
     }
 
+    public void CommitWithValue(float value, ulong updateTick, float deltaTime)
+    {
+        UpdateWithValue(value, updateTick, deltaTime);
+        Commit();
+    }
+
     public bool UpdateWithValue(float value, ulong updateTick, float deltaTime)
     {
         PrepareForUpdate(updateTick);
@@ -70,6 +113,31 @@ public class OneAxisInputControl : IInputControl
 
             nextState.Set(value, stateThreshold);
 
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool UpdateWithState(bool state, ulong updateTick, float deltaTime)
+    {
+
+        PrepareForUpdate(updateTick);
+
+        nextState.Set(state || nextState.State);
+
+        return state;
+    }
+
+    internal bool UpdateWithRawValue(float value, ulong updateTick, float deltaTime)
+    {
+
+        PrepareForUpdate(updateTick);
+
+        if (Utility.Abs(value) > Utility.Abs(nextState.RawValue))
+        {
+            nextState.RawValue = value;
+            nextState.Set(value, stateThreshold);
             return true;
         }
 
@@ -154,5 +222,11 @@ public class OneAxisInputControl : IInputControl
         lastState.Reset();
         thisState.Reset();
         nextState.Reset();
+    }
+
+
+    public static implicit operator float(OneAxisInputControl instance)
+    {
+        return instance.Value;
     }
 }

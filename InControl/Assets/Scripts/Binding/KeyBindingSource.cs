@@ -63,13 +63,13 @@ public class KeyBindingSource : BindingSource
         return false;
     }
 
-    public override bool GetState()
+    public override bool GetState(InputDevice inputDevice)
     {
         return Control.IsPressed;
     }
 
-    public override float GetValue()
+    public override float GetValue(InputDevice inputDevice)
     {
-        return GetState() ? 1.0f : 0.0f;
+        return GetState(inputDevice) ? 1.0f : 0.0f;
     }
 }
